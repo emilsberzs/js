@@ -62,6 +62,9 @@ function playRound(playersSelection, computerSelection) {
 }
 
 function game() {
+    let computer_points = 0;
+    let player_points = 0;
+    let winner = undefined;
     for (let i = 0; i < 5; i++) {
         playersSelection = prompt("Rock, Paper or Scissors?").toLowerCase()
         computerSelection = getComputerChoice()
@@ -69,8 +72,35 @@ function game() {
         console.log("Computer chose " + computerSelection)
         console.log("You chose " + playersSelection)
         console.log(outcome)
+
+        if (outcome === "You lose!"){
+            computer_points++;
+        }
+        else if (outcome === "You win!"){
+            player_points++;
+        } else {
+            //No one gets a point
+        }
+
+        if (computer_points > player_points) {
+            winner = "Computer"
+        }
+        else if (player_points > computer_points) {
+            winner = "Player"
+        } else {
+            winner = undefined;
+        }
+
+
     }
-    return "Game Over!"
+    let result;
+    if (winner != undefined){
+        result = winner + " wins!"
+    } else {
+        result = "What a day, its a draw!"
+    }
+
+    return "Game Over! " + "Computer scored: " + computer_points + ". " + "You scored: " + player_points + "."  + result
 }
 
 
