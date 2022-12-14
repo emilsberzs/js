@@ -1,49 +1,77 @@
-let computersNumber = Math.floor(Math.random() * 3) + 1
+let outcome = '';
+let message = '';
+let winner;
+let computersNumber = Math.floor(Math.random() * 3) + 1;
+let playersSelection = "";
+let computerSelection = "";
 
-function getComputerChoice(){
-    if (computersNumber === 1){
+function getComputerChoice() {
+    computersNumber = Math.floor(Math.random() * 3) + 1;
+    if (computersNumber === 1) {
         return "Rock"
     }
-    else if (computersNumber === 2){
+    else if (computersNumber === 2) {
         return "Paper"
     }
     else return "Scissors"
 }
 
-let playersSelection = prompt("Rock, Paper or Scissors?").toLowerCase()
-let computerSelection = getComputerChoice()
 
-function playRound(playersSelection,computerSelection) {
-    if (playersSelection === "rock"){
-        if (computerSelection === "Rock"){
-            return "Draw!"
+function playRound(playersSelection, computerSelection) {
+    if (playersSelection === "rock") {
+        if (computerSelection === "Rock") {
+            outcome = "Draw!"
         }
-        else if (computerSelection === "Paper"){
-            return "You lose!"
+        else if (computerSelection === "Paper") {
+            outcome = "You lose!"
         }
-        else return "You win!"
+        else outcome = "You win!"
     }
-    else if (playersSelection === "paper"){
-        if (computerSelection === "Rock"){
-            return "You win!"
+    else if (playersSelection === "paper") {
+        if (computerSelection === "Rock") {
+            outcome = "You win!"
         }
-        else if (computerSelection === "Paper"){
-            return "Draw!"
+        else if (computerSelection === "Paper") {
+            outcome = "Draw!"
         }
-        else return "You lose!"
+        else outcome = "You lose!"
     }
-    else {
-        if (computerSelection === "Rock"){
-            return "You lose!"
+    else if (playersSelection === 'scissors') {
+        if (computerSelection === "Rock") {
+            outcome = "You lose!"
         }
-        else if (computerSelection === "Paper"){
-            return "You win!"
+        else if (computerSelection === "Paper") {
+            outcome = "You win!"
         }
-        else return "Draw!"
+        else outcome = "Draw!"
     }
+    else outcome = "Something went wrong, please reload the page."
 
+
+
+    if (outcome === "Draw!") {
+        message = "Draw, You both chose " + playersSelection
+    }
+    else if (outcome === "You lose!") {
+        message = "You lost! " + computerSelection + " beats " + playersSelection + "!"
+    }
+    else if (outcome === "You win!") {
+        message = "You win! " + playersSelection + " beats " + computerSelection + "!"
+    }
+    else message = "Something went wrong, please reload the page"
 }
 
-console.log("Computer chose " + getComputerChoice())
-console.log("You chose " + playersSelection)
-console.log(playRound(playersSelection,computerSelection))
+function game() {
+    for (let i = 0; i < 5; i++) {
+        playersSelection = prompt("Rock, Paper or Scissors?").toLowerCase()
+        computerSelection = getComputerChoice()
+        playRound(playersSelection, computerSelection)
+        console.log("Computer chose " + computerSelection)
+        console.log("You chose " + playersSelection)
+        console.log(outcome)
+    }
+    return "Game Over!"
+}
+
+
+console.log(game())
