@@ -1,9 +1,9 @@
+let computer_points = 0;
+let player_points = 0;
 let outcome = '';
 let message = '';
-let winner;
 let computersNumber = Math.floor(Math.random() * 3) + 1;
-let playersSelection = "";
-let computerSelection = "";
+let computerSelection = getComputerChoice();
 
 function getComputerChoice() {
     computersNumber = Math.floor(Math.random() * 3) + 1;
@@ -17,7 +17,99 @@ function getComputerChoice() {
 }
 
 
+function makeMessage(playersSelection, computerSelection) {
+    if (outcome === "Draw!") {
+        message = "Draw, You both chose " + playersSelection
+    }
+    else if (outcome === "You lose!") {
+        message = "You lost! " + computerSelection + " beats " + playersSelection + "!"
+    }
+    else if (outcome === "You win!") {
+        message = "You win! " + playersSelection + " beats " + computerSelection + "!"
+    }
+    else if (outcome === "Something went wrong, please reload the page. Top part.") {
+        message = "Something went wrong in top part and passed it down to bottom"
+    } else {
+        message = "Something went wrong at the bottom"
+    }
+}
+
+
+function displayCurrentScore() {
+    //Create <p> to store result
+    const result_display = document.createElement('p')
+
+    //Initialize the outcome_div
+    const outcome_div = document.querySelector('#outcome_div');
+
+    //Reset round info before posting new outcome
+    while (outcome_div.firstChild) {
+        outcome_div.removeChild(outcome_div.firstChild)
+    }
+
+
+    //Add result text to the new paragraph
+    result_display.textContent = message;
+
+    //Append the outcome <p> to #result div
+    outcome_div.appendChild(result_display)
+}
+
+
+function updateTotalScore() {
+    if (outcome === "You lose!") {
+        computer_points++;
+    }
+    else if (outcome === "You win!") {
+        player_points++;
+    } else {
+        //Fu Bar
+    }
+
+
+    //Create two <p> for player point counter and computer point counter
+    const player_p = document.createElement('p')
+    player_p.id = "p_p";
+    const computer_p = document.createElement('p')
+    computer_p.id = "c_p";
+
+    //Fill player_p and computer_p with player_points and computer_points
+    player_p.textContent = "Player Points: " + player_points
+    computer_p.textContent = "Computer Points: " + computer_points
+
+    //Append player_p and computer_p to outcome_div
+    outcome_div.appendChild(player_p)
+    outcome_div.appendChild(computer_p)
+
+    //Create <p>
+
+}
+
+function resetPoints() {
+    computer_points = 0;
+    player_points = 0;
+    location.reload()
+}
+
+function checkScore() {
+    if (computer_points === 5){
+        updateTotalScore()
+        alert("Computer Won!")
+        resetPoints()
+    } 
+    else if (player_points === 5) {
+        updateTotalScore()
+        alert("Player Won!")
+        resetPoints()
+    }
+    else {
+       /// No idea 
+    }
+}
+
+
 function playRound(playersSelection, computerSelection) {
+
     if (playersSelection === "rock") {
         if (computerSelection === "Rock") {
             outcome = "Draw!"
@@ -25,7 +117,9 @@ function playRound(playersSelection, computerSelection) {
         else if (computerSelection === "Paper") {
             outcome = "You lose!"
         }
-        else outcome = "You win!"
+        else if (computerSelection === "Scissors") {
+            outcome = "You win!"
+        }
     }
     else if (playersSelection === "paper") {
         if (computerSelection === "Rock") {
@@ -45,63 +139,16 @@ function playRound(playersSelection, computerSelection) {
         }
         else outcome = "Draw!"
     }
-    else outcome = "Something went wrong, please reload the page."
+    else outcome = "Something went wrong, please reload the page. Top part."
 
+    makeMessage(playersSelection, computerSelection)
+    displayCurrentScore()
+    updateTotalScore()
+    checkScore()
 
-
-    if (outcome === "Draw!") {
-        message = "Draw, You both chose " + playersSelection
-    }
-    else if (outcome === "You lose!") {
-        message = "You lost! " + computerSelection + " beats " + playersSelection + "!"
-    }
-    else if (outcome === "You win!") {
-        message = "You win! " + playersSelection + " beats " + computerSelection + "!"
-    }
-    else message = "Something went wrong, please reload the page"
 }
 
-function game() {
-    let computer_points = 0;
-    let player_points = 0;
-    let winner = undefined;
-    for (let i = 0; i < 5; i++) {
-        playersSelection = prompt("Rock, Paper or Scissors?").toLowerCase()
-        computerSelection = getComputerChoice()
-        playRound(playersSelection, computerSelection)
-        console.log("Computer chose " + computerSelection)
-        console.log("You chose " + playersSelection)
-        console.log(outcome)
-
-        if (outcome === "You lose!"){
-            computer_points++;
-        }
-        else if (outcome === "You win!"){
-            player_points++;
-        } else {
-            //No one gets a point
-        }
-
-        if (computer_points > player_points) {
-            winner = "Computer"
-        }
-        else if (player_points > computer_points) {
-            winner = "Player"
-        } else {
-            winner = undefined;
-        }
-
-
-    }
-    let result;
-    if (winner != undefined){
-        result = winner + " wins!"
-    } else {
-        result = "What a day, its a draw!"
-    }
-
-    return "Game Over! " + "Computer scored: " + computer_points + ". " + "You scored: " + player_points + "."  + result
-}
-
-
-console.log(game())
+//Each pressed button plays one round
+document.getElementById('rock').addEventListener('click', function () { playRound('rock', getComputerChoice()) })
+document.getElementById('paper').addEventListener('click', function () { playRound('paper', getComputerChoice()) })
+document.getElementById('scissors').addEventListener('click', function () { playRound('scissors', getComputerChoice()) })
