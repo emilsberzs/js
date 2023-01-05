@@ -5,6 +5,7 @@ let message = '';
 let computersNumber = Math.floor(Math.random() * 3) + 1;
 let computerSelection = getComputerChoice();
 
+
 function getComputerChoice() {
     computersNumber = Math.floor(Math.random() * 3) + 1;
     if (computersNumber === 1) {
@@ -88,19 +89,23 @@ function updateTotalScore() {
 function resetPoints() {
     computer_points = 0;
     player_points = 0;
-    location.reload()
+    //location.reload()
 }
 
 function checkScore() {
     if (computer_points === 5){
         updateTotalScore()
-        alert("Computer Won!")
-        resetPoints()
+        const you_won = document.createElement('p')
+        you_won.textContent = "Congratulations, You Won!"
+        outcome_div.appendChild(you_won)
+        setTimeout(resetPoints(),5000)  
     } 
     else if (player_points === 5) {
         updateTotalScore()
-        alert("Player Won!")
-        resetPoints()
+        const you_lost = document.createElement('p')
+        you_lost.textContent = "Boo Hoo, You Lost!"
+        outcome_div.appendChild(you_lost)
+        setTimeout(resetPoints(),5000)  
     }
     else {
        /// No idea 
